@@ -1,15 +1,22 @@
 """
-This code simulates and optimizes the flight path of drones for extinguishing wildfires. 
-It models the drone's interactions with fires on a landscape, incorporating the need for water replenishment and prioritizing fire suppression based on size and proximity.
-The optimization process involves simulated annealing to iteratively improve the drone's tour path, aiming to maximize the total area of fire suppressed within operational constraints such as flight time and water capacity.
+This script simulates the operations of drones deployed to extinguish wildfires, focusing on optimizing their flight paths to maximize fire suppression efficiency within operational constraints such as limited water supply and operational time. The core challenge addressed by this script is determining the most effective sequence of fires for the drone to target and when it should detour to water sources for refilling.
 
-Approach:
-- The simulation models waypoints as either fires or water sources, using geometric calculations to simulate drone navigation and actions.
-- Fires are characterized by their area, and the simulation accounts for the dynamic nature of fires as they are being suppressed.
-- A GPS class provides utility functions for calculating distances and identifying nearest or largest fires and water sources.
-- The drone's flight path (tour) is initially generated using a nearest-neighbor algorithm, then optimized through simulated annealing to find a more effective sequence of waypoints.
-- The flight controller class manages the execution of the optimized tour, simulating real-time control of the drone, including navigation and water deployment.
+The optimization of the drone's flight path is crucial for enhancing the effectiveness of wildfire suppression efforts. Given a set of wildfires and water sources on a map, the script calculates an initial path that visits fires based on proximity. This path is then refined using a method known as simulated annealing to find a more efficient route that potentially suppresses more fire within the same time and resource constraints.
+
+Conceptual Overview of Path Optimization:
+- **Initial Path Generation**: Initially, the drone's path is determined by selecting the nearest fire to its current location, then repeating this process until all fires are included in the path. This method, though straightforward, may not be the most efficient in terms of overall fire suppression.
+- **Simulated Annealing for Path Optimization**: To optimize the path, the script employs a technique called simulated annealing. Simulated annealing is inspired by the process of heating and then slowly cooling a material to decrease defects, hence finding a state of minimum energy. In the context of path optimization, this technique helps find a route that maximizes fire suppression (minimizes "energy") by exploring various sequences of waypoints (fires and water sources).
+
+    - **Temperature**: Represents the willingness of the algorithm to accept worse solutions at the start, gradually decreasing. This allows exploration of various paths to avoid local optima.
+    - **Energy Function**: In this scenario, the "energy" of a state (or the cost of a tour) is inversely related to the effectiveness of a path in terms of fire suppression. A lower energy state is more desirable.
+    - **State Changes**: Small changes are made to the current path (like swapping the order of two fires) to explore neighboring states.
+    - **Acceptance Criterion**: Initially, the algorithm is more likely to accept changes that lead to worse solutions, allowing it to explore a wide range of possibilities. As the "temperature" decreases, the algorithm becomes more selective, honing in on the best solution.
+
+The objective of this optimization is to alter the drone's tour in such a way that the total area of fire suppressed is maximized, considering the limitations of drone operation such as water capacity and flight duration. The simulated annealing process iteratively refines the drone's path by exploring various sequences of visiting fires and refilling water, evaluating each variation based on its suppression effectiveness, and gradually focusing on the most promising solutions.
+
+This approach allows for the dynamic adjustment of the drone's strategy in real-time, factoring in the unpredictable nature of wildfires and operational constraints to achieve the most efficient suppression efforts possible.
 """
+
 
 from re import T
 from student_base import student_base  # Base class for drone control, assuming definition elsewhere
