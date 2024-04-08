@@ -17,7 +17,6 @@ The objective of this optimization is to alter the drone's tour in such a way th
 This approach allows for the dynamic adjustment of the drone's strategy in real-time, factoring in the unpredictable nature of wildfires and operational constraints to achieve the most efficient suppression efforts possible.
 """
 
-
 from re import T
 from student_base import student_base  # Base class for drone control, assuming definition elsewhere
 import time
